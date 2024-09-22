@@ -12,37 +12,45 @@ struct Truba { // создем структуру трубы и ее харак�
 
 
     void readT() { //создаем функцию ввода значений характеристик
-
+        string wrong;
         cout << "Input name: ";
         cin >> Name;
+        getline(cin >> Name, wrong);
 
         cout << "Input length: ";
         cin >> Long;
+        getline(cin >> Long, wrong);
 
         cout << "Input diametr: ";
         cin >> Diametr;
+        getline(cin >> Diametr, wrong);
+
+        if (Long <= 0 || Diametr <= 0) {
+            cout << "Incorrect data (pls add a new pipe) " << endl;
+        }
 
     }
 
-    void Display() { //прописываем условие если длина трубы <=0 и диаметр <=0, то трубы не существует 
-        if (Long <= 0 && Diametr <= 0) {
-            cout << "There is no pipe " << endl;
-        }
-        else {
+    void DisplayT() { //прописываем условие если длина трубы <=0 и диаметр <=0, то трубы не существует 
+        if (Long > 0 && Diametr > 0) {
             cout << "Pipe name: " << Name
                 << " Pipe length: " << Long
                 << " Pipe diametr: " << Diametr
-                << " Repairing: " << (Remont ? "Yes" : "No") << endl;
+                << " Repairing: " << (Remont ? "Yes" : "No") << endl;   
+        }
+        else {
+            cout << "There is no pipe (pls add a new pipe)" << endl;
         }
     }
 
-    void Edition() {
-        if (Long <= 0 && Diametr <= 0) {
-            cout << "There is no pipe";
-        }
-        else {
+    void EditionT() { // редактирование трубы
+        if (Long > 0 && Diametr > 0) {
             Remont = not(Remont);
             cout << " Repairing: " << (Remont ? "Yes" : "No") << endl;
+            
+        }
+        else {
+            cout << "There is no pipe (pls add a new pipe)";
         }
     }
 };
@@ -68,28 +76,57 @@ struct Comp { // создем структуру компрессорной ст
     int Effect;
 
     void readC() {
+        string wrong;
         cout << "Input name: ";
         cin >> Name;
+        getline(cin >> Name, wrong);
 
         cout << "Input count of cexov: ";
         cin >> Kolcexov;
+        getline(cin >> Kolcexov, wrong);
 
         cout << "Input count of cexov (working): ";
         cin >> Kolcexorab;
+        getline(cin >> Kolcexorab, wrong);
 
-        cout << "Input effective: ";
+        cout << "Input effective(%): ";
         cin >> Effect;
+        getline(cin >> Effect, wrong);
+
+        if (Kolcexov <= 0 || Kolcexorab <= 0 || Kolcexov <= Kolcexorab) {
+            cout << "There are no stations or incorrect data (pls add a new station)" << endl;
+        }
     }
-    void Display() {
-        if (Kolcexov <= 0 && Kolcexorab <= 0) {
-            cout << "There is no station" << endl;
+    void DisplayC() {
+        if (Kolcexov <= 0 || Kolcexorab <= 0 || Kolcexov <= Kolcexorab) {
+            cout << "There are no stations (pls add a new station)" << endl;
         }
         else {
             cout << "Station name: " << Name
-                << " Station kolcexov: " << Kolcexov
-                << " Station kolcexorab: " << Kolcexorab
-                << "Effect: " << Effect << endl;
+                << "Kolcexov: " << Kolcexov
+                << "Kolcexorab: " << Kolcexorab
+                << " Effect: " << Effect << endl;
         }
+    }
+    void EditionC() { // редактирование станций
+        if (Kolcexov <= 0 || Kolcexorab <= 0 || Kolcexov <= Kolcexorab) {
+            cout << "There are no stations or incorrect data (pls add a new station)";
+        }
+        else {
+            cout << "Input count of cexov: ";
+            cin >> Kolcexov;
+
+            cout << "Input count of cexov (working): ";
+            cin >> Kolcexorab;
+
+            cout << "Input effective(%): ";
+            cin >> Effect;
+
+            if (Kolcexov <= 0 || Kolcexorab <= 0 || Kolcexov <= Kolcexorab) {
+                cout << "Incorrect data (pls add a new station)" << endl;
+            }
+        }
+
     }
 };
 
@@ -118,14 +155,15 @@ int main() {
             C.readC();
             break;
         case 3:
-            T.Display();
-            C.Display();
+            T.DisplayT();
+            C.DisplayC();
             break;
         case 4:
-            T.Edition();
+            T.EditionT();
             break;
         case 5:
-            ;
+            C.EditionC();
+            break;
         case 6:
             ;
         case 7:
