@@ -9,26 +9,41 @@ struct Truba { // создем структуру трубы и ее харак�
     int Long;
     int Diametr;
     bool Remont = false;
-
+    string wrong0;
+    string wrong;
+    string wrong1;
 
     void readT() { //создаем функцию ввода значений характеристик
-        string wrong;
-        cout << "Input name: ";
-        cin >> Name;
-        getline(cin >> Name, wrong);
+        bool B = true;
+        
+        while (B) {
+            cout << "Input name: ";
+            getline(cin >> Name, wrong0);
+            if (Name.find(' ') != string::npos || wrong0.length() != 0) {
+                cin.clear();
+                Name = Name + wrong0;
+            }
 
-        cout << "Input length: ";
-        cin >> Long;
-        getline(cin >> Long, wrong);
+            cout << "Input length: ";
+            getline(cin >> Long, wrong);
+            
+            if (Long <= 0 || (int(Long) != Long || (to_string(Long)).find(' ') != string::npos || wrong.length() != 0)) {
+                cout << "Incorrect data (pls add a new pipe) " << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                continue;
+            }
 
-        cout << "Input diametr: ";
-        cin >> Diametr;
-        getline(cin >> Diametr, wrong);
-
-        if (Long <= 0 || Diametr <= 0) {
-            cout << "Incorrect data (pls add a new pipe) " << endl;
+            cout << "Input diametr: ";
+            getline(cin >> Diametr, wrong1);
+            if (Diametr <= 0 || (int(Diametr) != Diametr) || (to_string(Diametr)).find(' ') != string::npos || wrong1.length() != 0) {
+                cout << "Incorrect data (pls add a new pipe) " << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                continue;
+            }
+            B = false;
         }
-
     }
 
     void DisplayT() { //прописываем условие если длина трубы <=0 и диаметр <=0, то трубы не существует 
@@ -76,22 +91,22 @@ struct Comp { // создем структуру компрессорной ст
     int Effect;
 
     void readC() {
-        string wrong;
+        
         cout << "Input name: ";
         cin >> Name;
-        getline(cin >> Name, wrong);
+        
 
         cout << "Input count of cexov: ";
         cin >> Kolcexov;
-        getline(cin >> Kolcexov, wrong);
+        
 
         cout << "Input count of cexov (working): ";
         cin >> Kolcexorab;
-        getline(cin >> Kolcexorab, wrong);
+        
 
         cout << "Input effective(%): ";
         cin >> Effect;
-        getline(cin >> Effect, wrong);
+        
 
         if (Kolcexov <= 0 || Kolcexorab <= 0 || Kolcexov <= Kolcexorab) {
             cout << "There are no stations or incorrect data (pls add a new station)" << endl;
