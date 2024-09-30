@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -54,7 +55,7 @@ struct Truba { // создем структуру трубы и ее харак�
                 << "  Repairing: " << (Remont ? "Yes" : "No") << endl;   
         }
         else {
-            cout << "There is no pipe (pls add a new pipe)" << endl;
+            cout << "There is no pipe or incorrect data (pls add a new pipe)" << endl;
         }
     }
 
@@ -72,31 +73,47 @@ struct Truba { // создем структуру трубы и ее харак�
     void LoadingT() {
         if (Long > 0 && Diametr > 0) {
             
-            std::ofstream outFile("Truba.txt");
+            ofstream outFile("Truba.txt");
 
             if (!outFile) {
-                std::cerr << "Openning file Error!" << std::endl;
+                cerr << "Openning file Error!" << endl;
             }
 
-            outFile << Name << std::endl;
-            outFile << Long << std::endl;
-            outFile << Diametr << std::endl;
-            outFile << Remont << std::endl;
+            outFile << Name << endl;
+            outFile << Long << endl;
+            outFile << Diametr << endl;
+            outFile << Remont << endl;
             outFile.close();
 
-            std::cout << "Now data in file Truba.txt!" << std::endl;
+            cout << "Now data in file Truba.txt!" << endl;
         }
         else {
-            cout << "There is no pipe (pls add a new pipe)" << endl;
+            cout << "There is no pipe or incorrect data(pls add a new pipe)" << endl;
         }
 
     }
+    bool stringToBool(const string& str) {
+        string lowerStr = str;
+        transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower); // Приводим строку к нижнему регистру
+
+        if (lowerStr == "1") {
+            return true;
+        }
+        else if (lowerStr == "0") {
+            return false;
+        }
+        else {
+            throw invalid_argument("Not bool.");
+        }
+    }
+
     void UnloadingT() {
         const char* filename = "Truba.txt";
         ifstream file(filename);
 
         if (file) {
             cout << "File " << filename << " is real." << endl;
+            cout << "\n" << endl;
             ifstream inFile("Truba.txt");
 
             if (!inFile) {
@@ -104,26 +121,58 @@ struct Truba { // создем структуру трубы и ее харак�
             }
 
             string line1, line2, line3;
+            bool B = true;
 
-            if (getline(inFile, Name)) {
-                cout << "Pipe name: " << Name << endl;
+            while (B) {
+                if (getline(inFile, Name)) {
+                    cout << "Pipe name: " << Name << endl;
+                }
+
+                try {
+                    (getline(inFile, line1));
+                    Long = stoi(line1);
+                    if (Long < 0) {
+                        cout << "Pipe length: < 0" << endl;
+                    }
+                    else {
+                        cout << "Pipe length:" << Long << endl;
+                    }
+                }
+                catch (const invalid_argument&) {
+                    cout << "Pipe length: \"" << line1 << "\" is not int." << endl;
+                }
+                catch (const out_of_range& ) {
+                    cout << "Pipe length: \"" << line1 << "\" not in limit of int." << endl;
+                }
+                
+                try {
+                    (getline(inFile, line2));
+                    Diametr = stoi(line2);
+                    if (Diametr < 0) {
+                        cout << "Pipe diametr: < 0" << endl;
+                    }
+                    else {
+                        cout << "Pipe diametr:" << Diametr << endl;
+                    }
+                }
+                catch (const invalid_argument&) {
+                    cout << "Pipe diametr: \"" << line2 << "\" is not int." << endl;
+                }
+                catch (const out_of_range&) {
+                    cout << "Pipe diametr: \"" << line2 << "\" not in limit of int." << endl;
+                }
+                 
+                try {
+                    (getline(inFile, line3));
+                    Remont = stringToBool(line3);
+                    cout << "Repairing: " << (Remont ? "Yes" : "No") << endl;
+                }
+                catch (const invalid_argument& e) {
+                    cout << "Error: " << e.what() << " for str \"" << line3 << "\"" << endl;
+                }
+                cout << "\n" << endl;
+                B = false;
             }
-
-            if (getline(inFile, line1)) {
-                Long = stoi(line1); // Преобразуем строку в целое число
-                cout << "  Pipe length: " << Long << endl;
-            }
-
-            if (getline(inFile, line2)) {
-                Diametr = stoi(line2); 
-                cout << "  Pipe diametr: " << Diametr << endl;
-            }
-
-            if (getline(inFile, line3)) {
-                Remont = stoi(line3); 
-                cout << "  Repairing: " << (Remont ? "Yes" : "No") << endl;
-            }
-
             inFile.close();
         }
         else {
@@ -203,7 +252,7 @@ struct Comp { // создем структуру компрессорной ст
     }
     void DisplayC() {
         if (Kolcexov <= 0 || Kolcexorab < 0 || Kolcexov < Kolcexorab) {
-            cout << "There are no stations (pls add a new station)" << endl;
+            cout << "There are no station or incorrect data (pls add a new station)" << endl;
         }
         else {
             cout << "Station name: " << Name
@@ -237,62 +286,106 @@ struct Comp { // создем структуру компрессорной ст
     void LoadingC() {
         if (Kolcexov > 0 && Kolcexorab >= 0 && Kolcexov > Kolcexorab) {
 
-            std::ofstream outFile("Compress.txt");
+            ofstream outFile("Compress.txt");
 
             if (!outFile) {
-                std::cerr << "Openning file Error!" << std::endl;
+                cerr << "Openning file Error!" << endl;
             }
 
-            outFile << Name << std::endl;
-            outFile << Kolcexov << std::endl;
-            outFile << Kolcexorab << std::endl;
-            outFile << Effect << std::endl;
+            outFile << Name << endl;
+            outFile << Kolcexov << endl;
+            outFile << Kolcexorab << endl;
+            outFile << Effect << endl;
             outFile.close();
 
-            std::cout << "Now data in file Compress.txt!" << std::endl;
+            cout << "Now data in file Compress.txt!" << endl;
         }
         else {
-            cout << "There is no station (pls add a new station)" << endl;
+            cout << "There is no station or incorrect data(pls add a new station)" << endl;
         }
     }
     void UnloadingC() {
         const char* filename = "Compress.txt";
-        std::ifstream file(filename);
+        ifstream file(filename);
 
         if (file) {
-            std::cout << "File " << filename << " is real." << std::endl;
-            std::ifstream inFile("Compress.txt");
+            cout << "File " << filename << " is real." << endl;
+            cout << "\n" << endl;
+            ifstream inFile("Compress.txt");
 
             if (!inFile) {
-                std::cerr << "Openning file Error!" << std::endl;
+                cerr << "Openning file Error!" << endl;
             }
 
             string line1, line2, line3;
 
-            if (getline(inFile, Name)) {
-                cout << "Station name: " << Name << endl;
+            bool B = true;
+
+            while (B) {
+                if (getline(inFile, Name)) {
+                    cout << "Station name: " << Name << endl;
+                }
+
+                try {
+                    (getline(inFile, line1));
+                    Kolcexov = stoi(line1);
+                    if (Kolcexov < 0) {
+                        cout << "Kolcexov: < 0" << endl;
+                    }
+                    else {
+                        cout << "Kolcexov:" << Kolcexov << endl;
+                    }
+                }
+                catch (const invalid_argument&) {
+                    cout << "Kolcexov: \"" << line1 << "\" is not int." << endl;
+                }
+                catch (const out_of_range&) {
+                    cout << "Kolcexov: \"" << line1 << "\" not in limit of int." << endl;
+                }
+
+                try {
+                    (getline(inFile, line2));
+                    Kolcexorab = stoi(line2);
+                    if (Kolcexorab < 0) {
+                        cout << "Kolcexorab: < 0" << endl;
+                    }
+                    if (Kolcexov < Kolcexorab) {
+                        cout << "Kolcexov < Kolcexorab can not be real!" << endl;
+                    }
+                    else {
+                        cout << "Kolcexorab:" << Kolcexorab << endl;
+                    }
+                }
+                catch (const invalid_argument&) {
+                    cout << "Kolcexorab: \"" << line2 << "\" is not int." << endl;
+                }
+                catch (const out_of_range&) {
+                    cout << "Kolcexorab: \"" << line2 << "\" not in limit of int." << endl;
+                }
+
+                try {
+                    (getline(inFile, line3));
+                    Effect = stoi(line3);
+                    if (Effect < 0) {
+                        cout << "Effect: < 0" << endl;
+                    }
+                    else {
+                        cout << "Effect:" << Effect << endl;
+                    }
+                }
+                catch (const invalid_argument&) {
+                    cout << "Effect: \"" << line3 << "\" is not int." << endl;
+                }
+                catch (const out_of_range&) {
+                    cout << "Effect: \"" << line3 << "\" not in limit of int." << endl;
+                }
+                cout << "\n" << endl;
+                B = false;
             }
-
-            if (getline(inFile, line1)) {
-                Kolcexov = stoi(line1); // Преобразуем строку в целое число
-                cout << "  Kolcexov: " << Kolcexov << endl;
-            }
-
-            if (getline(inFile, line2)) {
-                Kolcexorab = stoi(line2);
-                cout << "  Kolcexorab: " << Kolcexorab << endl;
-            }
-
-            if (getline(inFile, line3)) {
-                Effect = stoi(line3);
-                cout << "  Effect: " << Effect << endl;
-            }
-
-
             inFile.close();
         }
         else {
-            std::cout << "File " << filename << " is not real." << std::endl;
+            cout << "File " << filename << " is not real." << endl;
         }
 
     }
