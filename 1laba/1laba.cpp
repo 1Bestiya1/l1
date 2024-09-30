@@ -28,7 +28,7 @@ struct Truba { // создем структуру трубы и ее харак�
             cout << " Input length: ";
             getline(cin >> Long, wrong);
             
-            if (Long <= 0 || (int(Long) != Long || (to_string(Long)).find(' ') != string::npos || wrong.length() != 0)) {
+            if (Long <= 0 || Long > 2147483646 ||(int(Long) != Long || (to_string(Long)).find(' ') != string::npos || wrong.length() != 0)) {
                 cout << "Incorrect data (pls add a new pipe) " << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -37,7 +37,7 @@ struct Truba { // создем структуру трубы и ее харак�
 
             cout << " Input diametr: ";
             getline(cin >> Diametr, wrong1);
-            if (Diametr <= 0 || (int(Diametr) != Diametr) || (to_string(Diametr)).find(' ') != string::npos || wrong1.length() != 0) {
+            if (Diametr <= 0 || Diametr > 2147483646 || (int(Diametr) != Diametr) || (to_string(Diametr)).find(' ') != string::npos || wrong1.length() != 0) {
                 cout << "Incorrect data (pls add a new pipe) " << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -131,8 +131,8 @@ struct Truba { // создем структуру трубы и ее харак�
                 try {
                     (getline(inFile, line1));
                     Long = stoi(line1);
-                    if (Long < 0) {
-                        cout << "Pipe length: < 0" << endl;
+                    if (Long < 0 || Long > 2147483646 ) {
+                        cout << "Pipe length: < 0 or Long > 2147483646" << endl;
                     }
                     else {
                         cout << "Pipe length:" << Long << endl;
@@ -148,7 +148,7 @@ struct Truba { // создем структуру трубы и ее харак�
                 try {
                     (getline(inFile, line2));
                     Diametr = stoi(line2);
-                    if (Diametr < 0) {
+                    if (Diametr < 0 || Diametr > 2147483646) {
                         cout << "Pipe diametr: < 0" << endl;
                     }
                     else {
@@ -222,7 +222,7 @@ struct Comp { // создем структуру компрессорной ст
         cout << " Input count of cexov: ";
         getline(cin >> Kolcexov, wrong);
 
-        if (Kolcexov <= 0 || (int(Kolcexov) != Kolcexov || (to_string(Kolcexov)).find(' ') != string::npos || wrong.length() != 0)) {
+        if (Kolcexov <= 0 || Kolcexov > 2147483646 || (int(Kolcexov) != Kolcexov || (to_string(Kolcexov)).find(' ') != string::npos || wrong.length() != 0)) {
             cout << "Incorrect data (pls add a new station) " << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -231,7 +231,7 @@ struct Comp { // создем структуру компрессорной ст
 
         cout << " Input count of cexov (working): ";
         getline(cin >> Kolcexorab, wrong1);
-        if (Kolcexorab < 0 || (int(Kolcexorab) != Kolcexorab) || (to_string(Kolcexorab)).find(' ') != string::npos || wrong1.length() != 0) {
+        if (Kolcexorab < 0 || Kolcexorab > 2147483646 || (int(Kolcexorab) != Kolcexorab) || (to_string(Kolcexorab)).find(' ') != string::npos || wrong1.length() != 0) {
             cout << "Incorrect data (pls add a new station) " << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -241,7 +241,7 @@ struct Comp { // создем структуру компрессорной ст
 
         cout << " Input effective(%): ";
         getline(cin >> Effect, wrong2);
-        if (Effect < 0 || (int(Effect) != Effect) || (to_string(Effect)).find(' ') != string::npos || wrong2.length() != 0) {
+        if (Effect < 0 || Effect > 100 || (int(Effect) != Effect) || (to_string(Effect)).find(' ') != string::npos || wrong2.length() != 0) {
             cout << "Incorrect data (pls add a new station) " << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -329,8 +329,8 @@ struct Comp { // создем структуру компрессорной ст
                 try {
                     (getline(inFile, line1));
                     Kolcexov = stoi(line1);
-                    if (Kolcexov < 0) {
-                        cout << "Kolcexov: < 0" << endl;
+                    if (Kolcexov < 0 || Kolcexov > 2147483646 ) {
+                        cout << "Kolcexov: < 0 or Kolcexov > 2147483646" << endl;
                     }
                     else {
                         cout << "Kolcexov:" << Kolcexov << endl;
@@ -346,8 +346,8 @@ struct Comp { // создем структуру компрессорной ст
                 try {
                     (getline(inFile, line2));
                     Kolcexorab = stoi(line2);
-                    if (Kolcexorab < 0) {
-                        cout << "Kolcexorab: < 0" << endl;
+                    if (Kolcexorab < 0 || Kolcexorab > 2147483646) {
+                        cout << "Kolcexorab: < 0 or Kolcexorab > 2147483646" << endl;
                     }
                     if (Kolcexov < Kolcexorab) {
                         cout << "Kolcexov < Kolcexorab can not be real!" << endl;
@@ -366,8 +366,8 @@ struct Comp { // создем структуру компрессорной ст
                 try {
                     (getline(inFile, line3));
                     Effect = stoi(line3);
-                    if (Effect < 0) {
-                        cout << "Effect: < 0" << endl;
+                    if (Effect < 0 || Effect > 100) {
+                        cout << "Effect: < 0 or Effect > 100" << endl;
                     }
                     else {
                         cout << "Effect:" << Effect << endl;
